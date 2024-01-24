@@ -1,17 +1,17 @@
 # ClickHouse sipHash128() in Go
 
 ClickHouse
-```
+```SQL
 select hex(sipHash128('foobar'));
-> 9B08DF451DCFF69D70058CD8A4B35A97
+-- 9B08DF451DCFF69D70058CD8A4B35A97
 
 select UUIDNumToString(sipHash128('foobar'));
-> 9b08df45-1dcf-f69d-7005-8cd8a4b35a97
+-- 9b08df45-1dcf-f69d-7005-8cd8a4b35a97
 
 ```
 
 Go, as bytes
-```
+```Go
 package main
 
 import (
@@ -30,7 +30,7 @@ func main() {
 ```
 
 Go, as UUID
-```
+```Go
 package main
 
 import (
