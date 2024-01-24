@@ -2,7 +2,7 @@ package siphash128
 
 import "encoding/binary"
 
-// SipHash128ch: sipHash128() in ClickHouse, their own implementation of SipHash:
+// SipHash128 is sipHash128() in ClickHouse, their own implementation of SipHash:
 // https://clickhouse.com/codebrowser/ClickHouse/src/Common/SipHash.h.html
 
 // Func based on:
@@ -23,8 +23,8 @@ func SipHash128(b []byte) [16]byte {
 		m := uint64(b[0]) | uint64(b[1])<<8 | uint64(b[2])<<16 | uint64(b[3])<<24 | uint64(b[4])<<32 | uint64(b[5])<<40 | uint64(b[6])<<48 | uint64(b[7])<<56
 
 		v3 ^= m
-		v0, v1, v2, v3 = sipHash128chRound(v0, v1, v2, v3)
-		v0, v1, v2, v3 = sipHash128chRound(v0, v1, v2, v3)
+		v0, v1, v2, v3 = sipHash128Round(v0, v1, v2, v3)
+		v0, v1, v2, v3 = sipHash128Round(v0, v1, v2, v3)
 		v0 ^= m
 
 		b = b[BlockSize:]
@@ -56,16 +56,16 @@ func SipHash128(b []byte) [16]byte {
 
 	// finalize
 	v3 ^= t
-	v0, v1, v2, v3 = sipHash128chRound(v0, v1, v2, v3)
-	v0, v1, v2, v3 = sipHash128chRound(v0, v1, v2, v3)
+	v0, v1, v2, v3 = sipHash128Round(v0, v1, v2, v3)
+	v0, v1, v2, v3 = sipHash128Round(v0, v1, v2, v3)
 	v0 ^= t
 
 	v2 ^= 0xff
 
-	v0, v1, v2, v3 = sipHash128chRound(v0, v1, v2, v3)
-	v0, v1, v2, v3 = sipHash128chRound(v0, v1, v2, v3)
-	v0, v1, v2, v3 = sipHash128chRound(v0, v1, v2, v3)
-	v0, v1, v2, v3 = sipHash128chRound(v0, v1, v2, v3)
+	v0, v1, v2, v3 = sipHash128Round(v0, v1, v2, v3)
+	v0, v1, v2, v3 = sipHash128Round(v0, v1, v2, v3)
+	v0, v1, v2, v3 = sipHash128Round(v0, v1, v2, v3)
+	v0, v1, v2, v3 = sipHash128Round(v0, v1, v2, v3)
 
 	// compute hash
 	hash := [16]byte{}
@@ -75,7 +75,7 @@ func SipHash128(b []byte) [16]byte {
 	return hash
 }
 
-func sipHash128chRound(v0 uint64, v1 uint64, v2 uint64, v3 uint64) (uint64, uint64, uint64, uint64) {
+func sipHash128Round(v0 uint64, v1 uint64, v2 uint64, v3 uint64) (uint64, uint64, uint64, uint64) {
 	v0 += v1
 	v1 = v1<<13 | v1>>(64-13)
 	v1 ^= v0
