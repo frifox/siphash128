@@ -1,4 +1,4 @@
-package siphash
+package siphash128
 
 import "encoding/binary"
 
